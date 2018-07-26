@@ -1,5 +1,6 @@
 # movies-database
-MindGeek Technical Assessment
+MindGeek Technical Assessment  
+@author Antonio Macovei  
 
 PHP version: 7.2.7  
 Symfony version: 4.1.1  
