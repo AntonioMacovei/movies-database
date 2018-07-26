@@ -73,10 +73,7 @@ class MovieController extends AbstractController
 			// If local path is not set, it means it wasn't rendered yet and we need to cache it
 			if(!$video->getLocalPath()) {
 				$ext = pathinfo($img->getUrl(), PATHINFO_EXTENSION);
-				if($video->getType() == 'card-image')
-					$localPath = 'video/' . $movie->getMovieId() . "_" . $i . "." . $ext;
-				if($video->getType() == 'keyart-image')
-					$localPath = 'video/' . $movie->getMovieId() . "_" . $i . "." . $ext;
+				$localPath = 'video/' . $movie->getMovieId() . "_" . $i . "." . $ext;
 				
 				// Check if the URL requested is available
 				$HTTPHeaders = get_headers($video->getUrl());
