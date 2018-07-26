@@ -1,0 +1,113 @@
+{% extends 'base_table.html.twig' %}
+
+{% block title %}Movie Database{% endblock %}
+
+{% block stylesheets %}
+    <!-- Fontfaces CSS-->
+    <link href="/css/font-face.css" rel="stylesheet" media="all">
+    <link href="/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link href="/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link href="/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/wow/animate.css" rel="stylesheet" media="all">
+    <link href="/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/slick/slick.css" rel="stylesheet" media="all">
+    <link href="/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="/css/theme.css" rel="stylesheet" media="all">
+	<link href="/css/custom.css" rel="stylesheet" media="all">
+{% endblock %}
+
+{% block searchbox %}
+	<div class="form-header">
+		<input class="au-input au-input--xl" type="text" name="search" id="searchField" placeholder="Search movies&hellip;" />
+		<button class="au-btn--submit" type="submit" id="search">
+			<i class="zmdi zmdi-search"></i>
+		</button>
+	</div>
+{% endblock %}
+
+{% block pageTitle %}Movies List{% endblock %}
+{% block body %}
+<div class="row">
+	<div class="col-md-12">
+		<div class="table-responsive table-responsive-data2">
+			{% if movies %}
+				<table class="table table-data2">
+					<thead>
+						<tr>
+							<th>headline</th>
+							<th>directors</th>
+							<th>year</th>
+							<th>duration</th>
+							<th>cert</th>
+							<th>last updated</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for movie in movies %}
+							<tr class="tr-shadow">
+								<td><a href="/movies/show/{{ movie.friendlyUrl }}">{{ movie.headline }}</a></td>
+								<td>
+									{% for director in movie.getDirectors %}
+										{{ director.name }}<br />
+									{% endfor %}
+								</td>
+								<td>
+									<span class="block-email">{{ movie.year }}</span>
+								</td>
+								<td class="desc">{{ movie.duration / 60 }} mins</td>
+								<td><span class="block-email">{{ movie.cert }}</span></td>
+								<td>{{ movie.lastUpdated|date("m/d/Y") }}</td>
+							<tr class="spacer"></tr>
+						{% endfor %}
+						<tr>
+							<td colspan="6">
+								{{ include('pagination.html.twig') }}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			{% else %}
+				<div class="alert alert-danger" role="alert">
+					Oops! It seems that either your search didn't return any hits or our database is empty! Maybe you can try again later.
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+	<!-- Jquery JS-->
+    <script src="/vendor/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap JS-->
+    <script src="/vendor/bootstrap-4.1/popper.min.js"></script>
+    <script src="/vendor/bootstrap-4.1/bootstrap.min.js"></script>
+    <!-- Vendor JS       -->
+    <script src="/vendor/slick/slick.min.js">
+    </script>
+    <script src="/vendor/wow/wow.min.js"></script>
+    <script src="/vendor/animsition/animsition.min.js"></script>
+    <script src="/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
+    </script>
+    <script src="/vendor/counter-up/jquery.waypoints.min.js"></script>
+    <script src="/vendor/counter-up/jquery.counterup.min.js">
+    </script>
+    <script src="/vendor/circle-progress/circle-progress.min.js"></script>
+    <script src="/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/vendor/chartjs/Chart.bundle.min.js"></script>
+    <script src="/vendor/select2/select2.min.js">
+    </script>
+
+    <!-- Main JS-->
+    <script src="/js/main.js"></script>
+	<script src="/js/custom.js"></script>
+{% endblock %}

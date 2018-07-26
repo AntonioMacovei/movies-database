@@ -1,0 +1,216 @@
+{% extends 'base_table.html.twig' %}
+
+{% block title %}Movie Database{% endblock %}
+
+{% block stylesheets %}
+    <!-- Fontfaces CSS-->
+    <link href="/css/font-face.css" rel="stylesheet" media="all">
+    <link href="/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link href="/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link href="/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/wow/animate.css" rel="stylesheet" media="all">
+    <link href="/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/slick/slick.css" rel="stylesheet" media="all">
+    <link href="/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="/css/theme.css" rel="stylesheet" media="all">
+	<link href="/css/custom.css" rel="stylesheet" media="all">
+{% endblock %}
+
+{% block searchbox %}
+	<div class="form-header">
+		<input class="au-input au-input--xl" type="text" name="search" id="searchField" placeholder="Search movies ..." />
+		<button class="au-btn--submit" type="submit" id="search">
+			<i class="zmdi zmdi-search"></i>
+		</button>
+	</div>
+{% endblock %}
+
+{% block pageTitle %}Movie Info{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="col-md-12">
+		<div class="table-responsive table-responsive-data2">
+			{% if movie %}
+				<div class="au-card">
+					<div class="au-card-inner">
+						
+						<h3 class="title-2 tm-b-5 font-weight-bold">
+							{{ movie.headline }} <small>({{ movie.year }})</small>
+							&nbsp;&nbsp;<span class="badge badge-secondary">{{ movie.duration / 60 }} mins</span>
+							{% if movie.rating %}&nbsp;&nbsp;<span class="badge badge-success">{{ movie.rating }}&nbsp;<i class="fas fa-star"></i></span>{% endif %}
+							&nbsp;&nbsp;<span class="badge badge-info">cert {{ movie.cert }}</span>
+						</h3>
+						<div class="row mt-4">
+							<div class="col-md-6">
+								<div class="card">
+									<div class="card-header">Director(s)</div>
+									<div class="card-body">
+										{% for director in movie.getDirectors %}
+											{{ director.name }}{% if not loop.last %},&nbsp;{% endif %}
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="card">
+									<div class="card-header">Cast</div>
+									<div class="card-body">
+										{% for cast in movie.getCasts %}
+											{{ cast.name }}{% if not loop.last %},&nbsp;{% endif %}
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<h4>Genres:&nbsp;
+								<small class="text-muted">
+									{% for genre in movie.getGenres %}
+										{{ genre.name }}{% if not loop.last %},&nbsp;{% endif %}
+									{% endfor %}
+								</small>
+							</h4>
+						</div>
+						<div class="row mt-4 no-gutter">
+							<div class="col-xl-6 pl-0">
+								<h4 class="mb-2">Synopsis</h4>
+								<p class="pl-3 text-justify">{{ movie.synopsis }}</p>
+							</div>
+							<div class="col-xl-6 pl-0">
+								{% if movie.quote %}
+									<h4 class="mb-2">Quote</h4>
+									<blockquote class="pl-3">
+										<i class="fas fa-quote-left"></i> {{ movie.quote }} <i class="fas fa-quote-right"></i>
+									</blockquote>
+								{% endif %}
+							</div>
+						</div>
+						<div class="row mt-4">
+							<h4 class="mb-2">Review{% if movie.reviewAuthor %}<small class="font-italic"> by {{ movie.reviewAuthor.name }}</small>{% endif %}</h4>
+							<p class="pl-3 pr-3 mt-1 text-justify">{{ movie.body }}</p>
+						</div>
+						<div class="float-right"><a href="{{ movie.url }}" target="_blank">Source</a></div>
+						<div class="clearfix"></div>
+						<div class="float-right font-italic mt-2">Last updated: {{ movie.lastUpdated|date("m/d/Y") }}</div>
+
+						<div class="row mt-4">
+							<div class="card">
+								<div class="card-header">Other info</div>
+								<div class="card-body">
+									Class: {{ movie.class }}<br />
+									ID: {{ movie.movieId }}<br />
+									Sum: {{ movie.sum }}<br />
+									{% if movie.skyGoId %}Sky Go ID: {{ movie.skyGoId }}<br />{% endif %}
+									{% if movie.skyGoUrl %}Sky Go URL: <a href="{{ movie.skyGoUrl }}" target="_blank">Here</a><br />{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row mt-2">
+							{% if movie.getViewingWindow %}
+								<div class="card">
+									<div class="card-header">Viewing window</div>
+									<div class="card-body">
+										{% if movie.getViewingWindow.title %}Title: {{ movie.getViewingWindow.title }}<br />{% endif %}
+										{% if movie.getViewingWindow.startDate %}Start date: {{ movie.getViewingWindow.startDate|date("m/d/Y") }}<br />{% endif %}
+										{% if movie.getViewingWindow.endDate %}End date: {{ movie.getViewingWindow.endDate|date("m/d/Y") }}<br />{% endif %}
+										{% if movie.getViewingWindow.wayToWatch %}Way to watch: {{ movie.getViewingWindow.wayToWatch }}{% endif %}
+									</div>
+								</div>
+							{% endif %}
+						</div>
+						{% if movie.getImages|length %}
+							<div class="row mt-4 no-gutter"><h4 class="mb-4">Card Images</h4></div>
+							<div class="row mt-2 no-gutter">
+								{% for image in movie.getImages %}
+									{% if image.type == 'card-image' and image.localPath %}
+										<div class="col-xl-2 mt-3">
+											<img src="/{{ image.localPath }}" style="height:100px !important" />	
+										</div>
+									{% endif %}
+								{% endfor %}
+							</div>
+							<div class="row mt-4 no-gutter"><h4 class="mb-4">Key Art Images</h4></div>
+							<div class="row mt-2 no-gutter">
+								{% for image in movie.getImages %}
+									{% if image.type == 'keyart-image' and image.localPath %}
+										<div class="col-xl-2 mt-3">
+											<img src="/{{ image.localPath }}" style="height:100px !important" />	
+										</div>
+									{% endif %}
+								{% endfor %}
+							</div>
+						{% endif %}
+						{% if movie.getVideos|length %}
+							<div class="row mt-4 no-gutter"><h4 class="mb-4">Videos</h4></div>
+							<div class="row mt-1 no-gutter">
+								<ul class="pl-5">
+									{% for video in movie.getVideos %}
+										{% if video.localPath %}
+											<li>
+												<video width="400" controls>
+													<source src="{{ video.localPath }}" type="video/mp4">
+													Your browser does not support HTML5 video.
+												</video>
+											</li>
+										{% else %}
+											<li>This video coudn't be downloaded. Try navigating to&nbsp;
+											<a href="{{ video.url }}" target="_blank">{{ video.title }}</a> - {{ video.quality }} quality</li>
+										{% endif %}
+									{% endfor %}
+								</ul>
+							</div>
+						{% endif %}
+						{% if movie.getGalleries|length %}
+							<div class="row mt-4 no-gutter"><h4 class="mb-4">Galleries</h4></div>
+							<div class="row mt-1 no-gutter">
+								<ul class="pl-5">
+									{% for gallery in movie.getGalleries %}
+										<li><a href="{{ gallery.url }}" target="_blank">{{ gallery.title }}</a></li>
+									{% endfor %}
+								</ul>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+	<!-- Jquery JS-->
+    <script src="/vendor/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap JS-->
+    <script src="/vendor/bootstrap-4.1/popper.min.js"></script>
+    <script src="/vendor/bootstrap-4.1/bootstrap.min.js"></script>
+    <!-- Vendor JS       -->
+    <script src="/vendor/slick/slick.min.js">
+    </script>
+    <script src="/vendor/wow/wow.min.js"></script>
+    <script src="/vendor/animsition/animsition.min.js"></script>
+    <script src="/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
+    </script>
+    <script src="/vendor/counter-up/jquery.waypoints.min.js"></script>
+    <script src="/vendor/counter-up/jquery.counterup.min.js">
+    </script>
+    <script src="/vendor/circle-progress/circle-progress.min.js"></script>
+    <script src="/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/vendor/chartjs/Chart.bundle.min.js"></script>
+    <script src="/vendor/select2/select2.min.js">
+    </script>
+
+    <!-- Main JS-->
+    <script src="/js/main.js"></script>
+	<script src="/js/custom.js"></script>
+{% endblock %}

@@ -1,0 +1,14 @@
+
+{% if total > 1 %}
+	<div class="pagination" >
+		{% if page - 2 > 0 %} <a href="{{ link }}1"> << </a> {% endif %}
+		{% if page - 1 > 0 %} <a href="{{ link }}{{ page - 1 }}"> Previous </a> {% endif %}
+		&nbsp;&nbsp;Page {{ page }} of {{ total }}&nbsp;&nbsp;
+		{% if page - 1 > 0 %} <a href="{{ link }}{{ page - 1 }}"> {{ page - 1 }} </a> {% endif %}
+		{% if total > 0 %} <a class="current_page" href="{{ link }}{{ page }}"> {{ page }}</a> {% endif %}
+		{% if page + 1 <= total %} <a href="{{ link }}{{ page + 1 }}"> {{ page + 1 }} </a> {% endif %}
+		{% if page + 2 <= total %} <a href="{{ link }}{{ page + 2 }}"> {{ page + 2 }} </a> {% endif %}
+		{% if page < total %} <a href="{{ link }}{{ page + 1 }}"> Next </a> {% endif %}
+		{% if page + 3 <= total %} <a href="{{ link }}{{ total }}"> >> </a> {% endif %}
+	</div>
+{% endif %}
